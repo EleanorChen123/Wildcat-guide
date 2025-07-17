@@ -1,0 +1,165 @@
+:root {
+  --brand-primary: #4A148C; /* Deep Purple, for consistency with original navbar/buttons if needed */
+  --brand-secondary: #9C27B0; /* Medium Purple, for consistency */
+  --brand-light: #E1BEE7; /* General light purple, for consistency */
+  --card-background-light-purple: #F5F1FA; /* 您指定的卡片背景淡紫色 */
+  --text-purple: #4A148C; /* For text that should be the brand primary color */
+  --button-hover: #6A1B9A; /* Darker purple for button hover state */
+  --link-default-black: black; /* Default black for links inside cards */
+  --link-hover-blue: #007bff; /* Bootstrap's primary blue for link hover */
+
+  /* 从您提供的旧CSS中提取的变量，确保这些颜色也被考虑 */
+  --old-brand-purple: #4e2a84;
+  --old-brand-light: #f5f1fa; /* 这个就是您要的卡片颜色 */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: white; /* 确保背景是白色 */
+  padding-top: 56px; /* Adjust based on navbar height */
+}
+
+/* Navbar styles */
+.navbar {
+  /* 假设导航栏还是用之前的深紫色，如果需要用旧的 #4e2a84，可以改成 var(--old-brand-purple) */
+  background-color: var(--brand-primary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+  font-weight: bold;
+  color: white !important; /* Ensure brand name is white */
+}
+
+.nav-link {
+  color: white !important; /* Ensure nav links are white */
+}
+
+.nav-link:hover {
+  color: var(--brand-light) !important; /* Light purple on hover */
+}
+
+/* Main content padding for fixed navbar for HomeView */
+.home-top {
+  padding-top: 80px; /* Space for the fixed navbar */
+  min-height: calc(100vh - 56px); /* Ensure content takes full height minus navbar */
+  /* 移除了可能设置背景色的样式，确保继承body的白色背景 */
+}
+
+/* Search title (Wildcat Guide) */
+.search-title {
+  /* 假设标题颜色还是用之前的深紫色，如果需要用旧的 #4e2a84，可以改成 var(--old-brand-purple) */
+  color: var(--brand-primary);
+  font-weight: bold; /* Added for consistency with previous styles */
+  margin-top: 2rem; /* Spacing from the top */
+  font-size: 3rem; /* 从旧CSS中获取的字体大小 */
+  margin-bottom: 3rem; /* 从旧CSS中获取的底部外边距 */
+}
+
+/* Search input and button */
+.input-group .form-control {
+  border-color: var(--brand-primary);
+  box-shadow: none;
+}
+
+.input-group .form-control:focus {
+  border-color: var(--brand-secondary);
+  box-shadow: 0 0 0 0.25rem rgba(156, 39, 176, 0.25); /* Bootstrap's focus ring with brand color */
+}
+
+.btn-brand {
+  /* 假设按钮颜色还是用之前的深紫色，如果需要用旧的 #4e2a84，可以改成 var(--old-brand-purple) */
+  background-color: var(--brand-primary);
+  color: white;
+  border-color: var(--brand-primary);
+  border-radius: .375rem; /* 从旧CSS中获取的圆角 */
+}
+
+.btn-brand:hover {
+  /* 假设按钮hover颜色还是用之前的深紫色，如果需要用旧的 #3e2270，可以改成 var(--old-brand-purple) 的hover色 */
+  background-color: var(--button-hover);
+  border-color: var(--button-hover);
+}
+
+/* Quick access cards (used in HomeView, HistoryView's unlogged state, and now LoginView) */
+.quick-card {
+  background-color: var(--card-background-light-purple); /* 统一使用您指定的 #F5F1FA */
+  border-radius: 8px; /* 从旧CSS中获取的圆角 */
+  border: 0; /* 从旧CSS中获取的边框 */
+  padding: 1rem; /* 从旧CSS中获取的内边距 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* 保留一个轻微的阴影，让卡片有立体感 */
+}
+
+.quick-card .card-title {
+  /* 假设卡片标题颜色还是用之前的深紫色，如果需要用旧的 #4e2a84，可以改成 var(--old-brand-purple) */
+  color: var(--text-purple);
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-size: 1.25rem; /* 从旧CSS中获取的字体大小 */
+}
+
+.quick-qa li {
+  margin-bottom: .5rem; /* 从旧CSS中获取的底部外边距 */
+  padding-left: 1rem; /* 从旧CSS中获取的左侧内边距 */
+}
+
+.quick-qa .card-link {
+  color: #333; /* 从旧CSS中获取的链接颜色 */
+  text-decoration: underline; /* 从旧CSS中获取的下划线 */
+}
+
+.quick-qa .card-link:hover {
+  color: #0d6efd; /* 从旧CSS中获取的hover颜色 */
+  text-decoration: underline;
+}
+
+/* Ask More link */
+.ask-more-link {
+  display: block; /* Make it a block element for spacing */
+  text-align: right; /* 对齐到右边 */
+  /* 假设'Ask More'链接颜色还是用之前的深紫色，如果需要用旧的 #4e2a84，可以改成 var(--old-brand-purple) */
+  color: var(--text-purple);
+  text-decoration: none; /* 默认无下划线 */
+  font-weight: bold;
+  transition: color 0.2s ease-in-out;
+  font-size: 0.9rem; /* 从旧CSS中获取的字体大小 */
+}
+
+.ask-more-link:hover {
+  color: #0d6efd; /* 从旧CSS中获取的hover颜色 */
+  text-decoration: underline;
+}
+
+/* General text color for purple text */
+.text-purple {
+  color: var(--text-purple); /* 假设所有text-purple都用新的深紫色 */
+}
+
+/* Table hover effect, copied from your old CSS */
+.table-hover tbody tr:hover{ background:#f8f8fc; }
+.table-hover tbody tr:hover a{ color:#0d6efd; text-decoration:underline; }
+
+/* List group flush links, copied from your old CSS */
+ul.list-group-flush li a{
+  text-decoration:none;
+  color:#333;
+}
+ul.list-group-flush li a:hover{
+  color:#0d6efd;
+  text-decoration:underline;
+}
+
+
+/* Utility for centering content in specific views */
+.d-flex.flex-column.align-items-center.justify-content-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* 确保这些视图的背景也继承body的白色 */
+}
+
+.active-category { 
+  font-weight: bold;
+  border-radius: 4px; 
+}
