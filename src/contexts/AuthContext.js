@@ -1,35 +1,42 @@
 import React, { createContext, useState, useContext } from 'react';
 
-// Create Auth Context
+// 创建上下文
 const AuthContext = createContext(null);
 
+// 提供器组件
 export const AuthProvider = ({ children }) => {
-  // Manages login status, persisted in localStorage
+  // 登录状态
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    const storedLoginStatus = localStorage.getItem('isLoggedIn');
-    return storedLoginStatus === 'true';
+    return localStorage.getItem('isLoggedIn') === 'true';
   });
 
-  // Mock login function
-  const login = () => {
+  // 用户邮箱
+  const [email, setEmail] = useState(() => {
+    return localStorage.getItem('email') || null;
+  });
+
+  // 登录函数（接收 email）
+  const login = (userEmail) => {
     setIsLoggedIn(true);
+    setEmail(userEmail);
     localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('email', userEmail);
   };
 
-  // Mock logout function
+  // 登出函数
   const logout = () => {
     setIsLoggedIn(false);
+    setEmail(null);
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('email');
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, email, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook to use Auth Context
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+// 自定义 hook
+export const useAuth = () => useContext(AuthContext);

@@ -7,7 +7,7 @@ import Navbar from './components/Navbar';
 import HomeView from './components/HomeView';
 import HistoryView from './components/HistoryView';
 import LoginView from './components/LoginView';
-import QuestionMapView from './components/QuestionMapView'; // Import the new QuestionMapView component
+import QuestionMapView from './components/QuestionMapView';
 import { AuthProvider } from './contexts/AuthContext';
 
 /**
@@ -16,6 +16,8 @@ import { AuthProvider } from './contexts/AuthContext';
  *
  * @returns {JSX.Element} The main application layout with routing configured.
  */
+import CategoryList from './components/CategoryList';
+
 function App() {
   return (
     <Router>
@@ -26,7 +28,10 @@ function App() {
             <Route path="/" element={<HomeView />} />
             <Route path="/history" element={<HistoryView />} />
             <Route path="/login" element={<LoginView />} />
-            <Route path="/ask-more" element={<QuestionMapView />} /> {/* Add the new route for Question Map */}
+            <Route path="/ask-more" element={<QuestionMapView />} />
+
+        
+            <Route path="/categories" element={<CategoryList />} />
           </Routes>
         </div>
       </AuthProvider>
@@ -35,3 +40,5 @@ function App() {
 }
 
 export default App;
+
+

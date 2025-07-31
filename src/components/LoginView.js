@@ -9,13 +9,36 @@ function LoginView() {
   const { login } = useAuth(); // Get login function from context
 
   // Handles form submission
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
 
-    // Simulated login: any non-empty input is considered success
     if (netId.trim() !== '' && password.trim() !== '') {
-      login(); // Update global login state
-      navigate('/'); // Navigate to home after login
+      const email = `${netId}@northwestern.edu`;
+
+      try {
+        // ✅ 调用后端 POST /api/users 接口
+        const response = await fetch("http://localhost:5001/api/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        if (!response.ok) {
+          throw new Error("User creation failed");
+        }
+
+        console.log("✅ User creation API called successfully");
+
+        // ✅ 改这里：登录时传入 email
+        login(email);
+        navigate('/'); // Navigate to home after login
+
+      } catch (error) {
+        console.error("❌ Failed to create user:", error);
+        alert("Login failed. Could not create user.");
+      }
     } else {
       alert('Please enter both NetID and Password to simulate login.');
     }

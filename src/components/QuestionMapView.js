@@ -1,23 +1,14 @@
 import React, { useState } from 'react'; // Import useState hook
 
-/**
- * QuestionMapView component displays the detailed "Question Map" page.
- * It features a left sidebar for categories and a main content area for questions.
- * This is a placeholder structure, actual content needs to be filled in.
- *
- * @returns {JSX.Element} The Question Map page layout.
- */
 function QuestionMapView() {
-  // State to manage the currently selected category
-  const [selectedCategory, setSelectedCategory] = useState('IT Support'); // Default selected category
+  const [selectedCategory, setSelectedCategory] = useState('IT Support');
+  const [searchInput, setSearchInput] = useState('');
 
-  // Mock data for questions based on category
   const questionsData = {
     'IT Support': [
-      // Modified to include 'type' and 'url' for external link
       { id: 'resetNetID', text: 'Reset NetID password', type: 'external', url: 'https://services.northwestern.edu/TDClient/30/Portal/KB/ArticleDet?ID=1399' },
-      { id: 'wifiNotWorking', text: 'Wi-Fi not working', type: 'internal' }, // Explicitly set type to internal
-      { id: 'serviceDeskLocation', text: 'Service Desk location', type: 'internal' }, // Explicitly set type to internal
+      { id: 'wifiNotWorking', text: 'Wi-Fi not working', type: 'internal' },
+      { id: 'serviceDeskLocation', text: 'Service Desk location', type: 'internal' },
     ],
     'OISS': [
       { id: 'extendF1', text: 'Extend F-1 visa', type: 'internal' },
@@ -46,21 +37,69 @@ function QuestionMapView() {
     ],
   };
 
-  // Function to handle category click
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
+  };
+
+  const handleQuestionClick = async (questionText) => {
+    const userEmail = 'test@example.com'; // 可改成 localStorage.getItem('email')
+    try {
+      const response = await fetch('http://localhost:5001/api/history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: userEmail, search_query: questionText }),
+      });
+
+      if (!response.ok) throw new Error('Failed to record history');
+      console.log('✅ History recorded successfully');
+    } catch (error) {
+      console.error('❌ Failed to record history:', error);
+    }
+  };
+
+  const handleSearchClick = async () => {
+    const trimmed = searchInput.trim();
+    if (!trimmed) return;
+    const userEmail = 'test@example.com'; // 可改成 localStorage.getItem('email')
+
+    try {
+      const response = await fetch('http://localhost:5001/api/history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: userEmail, search_query: trimmed }),
+      });
+
+      if (!response.ok) throw new Error('Failed to record search history');
+      console.log('✅ Search history recorded successfully');
+    } catch (error) {
+      console.error('❌ Failed to record search history:', error);
+    }
   };
 
   return (
     <div className="container-fluid" style={{ paddingTop: '80px', minHeight: '100vh' }}>
       <h1 className="display-4 fw-bold mb-4 search-title text-purple text-center" style={{ marginTop: '2rem' }}>Question Map</h1>
-      <div className="input-group mb-5 w-75 mx-auto" style={{ maxWidth: '600px' }}> {/* Centered search bar */}
-          <input type="text" className="form-control" placeholder="Type your question" id="questionMapSearchInput" />
-          <button className="btn btn-brand" type="button" id="questionMapSearchButton">Search</button>
+      
+      <div className="input-group mb-5 w-75 mx-auto" style={{ maxWidth: '600px' }}>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Type your question"
+          id="questionMapSearchInput"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+        <button
+          className="btn btn-brand"
+          type="button"
+          id="questionMapSearchButton"
+          onClick={handleSearchClick}
+        >
+          Search
+        </button>
       </div>
 
-      <div className="row justify-content-center"> {/* Center the row */}
-        {/* Left Sidebar for Categories */}
+      <div className="row justify-content-center">
         <div className="col-md-3">
           <div className="card shadow-sm quick-card">
             <div className="card-body">
@@ -69,11 +108,15 @@ function QuestionMapView() {
                 {Object.keys(questionsData).map((category) => (
                   <li
                     key={category}
-                    className={`list-group-item bg-transparent ${selectedCategory === category ? 'active-category' : ''}`} // Corrected line
-                    onClick={() => handleCategoryClick(category)} // Add onClick handler
-                    style={{ cursor: 'pointer' }} // Indicate it's clickable
+                    className={`list-group-item bg-transparent ${selectedCategory === category ? 'active-category' : ''}`}
+                    onClick={() => handleCategoryClick(category)}
+                    style={{ cursor: 'pointer' }}
                   >
-                    <button type="button" className="btn btn-link text-purple" style={{ textDecoration: 'none', fontWeight: selectedCategory === category ? 'bold' : 'normal' }}>
+                    <button
+                      type="button"
+                      className="btn btn-link text-purple"
+                      style={{ textDecoration: 'none', fontWeight: selectedCategory === category ? 'bold' : 'normal' }}
+                    >
                       {category}
                     </button>
                   </li>
@@ -83,29 +126,29 @@ function QuestionMapView() {
           </div>
         </div>
 
-        {/* Right Content Area for Specific Questions */}
-        <div className="col-md-7"> {/* Adjusted column width for better layout */}
+        <div className="col-md-7">
           <div className="card shadow-sm quick-card">
             <div className="card-body">
               <h5 className="card-title text-purple">{selectedCategory} Questions</h5>
               <ul className="list-unstyled quick-qa">
-                {/* Updated rendering logic for each question item */}
                 {questionsData[selectedCategory].map((q) => (
                   <li key={q.id}>
-                    {/* Render based on type: external link or button for internal action */}
                     {q.type === 'external' ? (
                       <a
-                        href={q.url} // Use the URL from the data
+                        href={q.url}
                         className="card-link"
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => handleQuestionClick(q.text)}
                       >
                         {q.text}
                       </a>
                     ) : (
-                      // If type is not external (i.e., 'internal' or undefined), render as button
-                      // This ensures no href="#" issues, and prepares for future onClick handling.
-                      <button type="button" className="btn btn-link card-link">
+                      <button
+                        type="button"
+                        className="btn btn-link card-link"
+                        onClick={() => handleQuestionClick(q.text)}
+                      >
                         {q.text}
                       </button>
                     )}
@@ -113,7 +156,9 @@ function QuestionMapView() {
                 ))}
               </ul>
               <p className="mt-4">
-                {selectedCategory === 'IT Support' ? 'Click on a question above or select another category.' : 'Select a category from the left to see related questions.'}
+                {selectedCategory === 'IT Support'
+                  ? 'Click on a question above or select another category.'
+                  : 'Select a category from the left to see related questions.'}
               </p>
             </div>
           </div>
